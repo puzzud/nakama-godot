@@ -9,7 +9,9 @@ func _ready():
 	var f = File.new()
 	if f.open("res://settings.json", File.READ) != OK:
 		return
-	var json = JSON.parse(f.get_as_text())
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(f.get_as_text())
+	var json = test_json_conv.get_data()
 	if json.error != OK or typeof(json.result) != TYPE_DICTIONARY:
 		return
 	var d = json.result

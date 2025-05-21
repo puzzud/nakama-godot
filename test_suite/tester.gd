@@ -7,7 +7,7 @@ var fixed_time = 0.0
 var dirs = ["tests"]
 
 func _ready():
-	while not dirs.empty():
+	while not dirs.is_empty():
 		var d = dirs.pop_front()
 		_expand(d, dirs)
 	print("Running %d tests:\n%s" % [tests.size(), tests])
@@ -37,16 +37,16 @@ func _end_tests():
 	print("======= TESTS END")
 	set_process(false)
 	set_physics_process(false)
-	yield(get_tree().create_timer(1), "timeout")
+	await get_tree().create_timer(1).timeout
 	get_tree().call_deferred("quit")
 
 func _expand(p_name, r_dirs):
-	var dir = Directory.new()
+	var dir = DirAccess.new()
 	dir.open("res://")
 	if dir.change_dir(p_name) != OK:
 		print("Unable to chdir into: %s" % p_name)
 		return
-	dir.list_dir_begin(true, true)
+	dir.list_dir_begin() # TODOConverter3To4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	var f = dir.get_next()
 	while f != "":
 		if dir.current_is_dir():
